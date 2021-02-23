@@ -38,11 +38,14 @@ const assignmentsRouter = require('./routes/assignments')
 const resourcesRouter = require('./routes/resources')
 const studentsRouter = require('./routes/students')
 const campaignResultsRouter = require('./routes/campaignResults')
+const assignmentResultsRouter = require('./routes/assignmentResults')
 
 app.use('/questions', questionsRouter)
 app.use('/assignments', assignmentsRouter)
 app.use('/resources', resourcesRouter)
+app.use('/students', studentsRouter)
 app.use('/campaignResults', campaignResultsRouter)
+app.use('/assignmentResults', assignmentResultsRouter)
 
 
 app.listen(5000, () => console.log('Server Started'))

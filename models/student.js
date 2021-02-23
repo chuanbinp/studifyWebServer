@@ -12,6 +12,14 @@ const studentSchema = new mongoose.Schema({
   tutorialGrp: {
     type: String,
     required: true
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
   }
 }, { collection: 'Student'})
 

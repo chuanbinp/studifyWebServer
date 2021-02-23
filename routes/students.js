@@ -19,6 +19,8 @@ router.post('/', async (req, res) => {
       name: req.body.name,
       matricNo: req.body.matricNo,
       tutorialGrp: req.body.tutorialGrp,
+      username: req.body.username,
+      password: req.body.password,
     })
     try {
       const newStudent = await stud.save()
@@ -33,6 +35,8 @@ router.patch('/:id', getStudent, async (req, res) => {
     res.student.name = req.body.name
     res.student.matricNo = req.body.matricNo
     res.student.tutorialGrp = req.body.tutorialGrp
+    res.student.username = req.body.username
+    res.student.password = req.body.password
 
     try {
       const updatedStudent = await res.student.save()
