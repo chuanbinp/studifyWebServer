@@ -38,7 +38,7 @@ router.patch('/:id', getResource, async (req, res) => {
 
     try {
       const updatedResource = await res.resource.save()
-      res.json(updatedResource)
+      res.status(201).json(updatedResource)
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
@@ -48,7 +48,7 @@ router.patch('/:id', getResource, async (req, res) => {
 router.delete('/:id', getResource, async (req, res) => {
     try {
       await res.resource.remove()
-      res.json({ message: 'Deleted Resource' })
+      res.status(201).json({ message: 'Deleted Resource' })
     } catch (err) {
       res.status(500).json({ message: err.message })
     }

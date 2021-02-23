@@ -44,7 +44,7 @@ router.patch('/:id', getStudent, async (req, res) => {
 
     try {
       const updatedStudent = await res.student.save()
-      res.json(updatedStudent)
+      res.status(201).json(updatedStudent)
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
@@ -55,7 +55,7 @@ router.delete('/:id', getStudent, async (req, res) => {
     try {
       await res.student.remove().then(async() => {
         await removeStudentCampaignResult(res.student._id, res)
-        res.json({ message: 'Deleted Student' })
+        res.status(201).json({ message: 'Deleted Student' })
       })
       
     } catch (err) {

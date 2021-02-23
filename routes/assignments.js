@@ -33,7 +33,7 @@ router.patch('/:id', getAssignment, async (req, res) => {
 
     try {
       const updatedAssignment = await res.assignment.save()
-      res.json(updatedAssignment)
+      res.status(201).json(updatedAssignment)
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
@@ -43,7 +43,7 @@ router.patch('/:id', getAssignment, async (req, res) => {
 router.delete('/:id', getAssignment, async (req, res) => {
     try {
       await res.assignment.remove()
-      res.json({ message: 'Deleted Assignment' })
+      res.status(201).json({ message: 'Deleted Assignment' })
     } catch (err) {
       res.status(500).json({ message: err.message })
     }

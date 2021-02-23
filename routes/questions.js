@@ -48,7 +48,7 @@ router.patch('/:id', getQuestion, async (req, res) => {
     res.question.answer = req.body.answer
     try {
       const updatedQuestion = await res.question.save()
-      res.json(updatedQuestion)
+      res.status(201).json(updatedQuestion)
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
@@ -58,7 +58,7 @@ router.patch('/:id', getQuestion, async (req, res) => {
 router.delete('/:id', getQuestion, async (req, res) => {
     try {
       await res.question.remove()
-      res.json({ message: 'Deleted Question' })
+      res.status(201).json({ message: 'Deleted Question' })
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
