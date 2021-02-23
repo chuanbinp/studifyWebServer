@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Student = require('../models/student.js')
-const CampaignResult = require('../models/campaignResult.js')
+var CampaignResult = require('../models/campaignResult.js')
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -89,7 +89,6 @@ async function initStudentCampaignResult(student, res) {
 
 // Delete student's campaign results using id
 async function removeStudentCampaignResult(id, res) {
-  console.log(id)
   let campaignResult
     try {
         campaignResult = await CampaignResult.findOne({ userId: id })

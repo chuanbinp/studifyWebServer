@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Assignment = require('../models/assignment.js')
-const Question = require('../models/question')
+var Question = require('../models/question.js')
 
 // Getting all
 router.get('/', getAllAssignments, async (req, res) => {

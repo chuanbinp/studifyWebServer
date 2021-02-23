@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const Question = require('../models/question')
+const Question = require('../models/question.js')
+var Assignment = require('../models/assignment.js')
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -57,12 +58,27 @@ router.patch('/:id', getQuestion, async (req, res) => {
 // Deleting One
 router.delete('/:id', getQuestion, async (req, res) => {
     try {
-      await res.question.remove()
-      res.status(201).json({ message: 'Deleted Question' })
+      await res.question.remove().then(async() => {
+        await removeQuestionIdFromAssignments(res.question._id, res)
+        res.status(201).json({ message: 'Deleted Question' })
+      })
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
   })
+
+// Delete linked questions in all assingments using question id
+async function removeQuestionIdFromAssignments(id, res) {
+  console.log(id)
+    try {
+        await Assignment.updateMany(
+          {questionIds: id },
+          {$pull: { questionIds: id}}
+        )
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+}
 
 async function getQuestion(req, res, next) {
     let question
