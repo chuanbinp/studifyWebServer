@@ -12,6 +12,27 @@ db.once('open', () => console.log('Connected to Database'))
 
 app.use(express.json())
 
+// CORS
+const cors = require('cors')
+const whitelist = [
+    'http://localhost:3000'
+  ];
+const corsOptions = {
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        // ERROR HERE
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+};
+app.use(cors(corsOptions));
+
+app.set('trust proxy', 1);
+
 const questionsRouter = require('./routes/questions')
 const assignmentsRouter = require('./routes/assignments')
 const resourcesRouter = require('./routes/resources')
@@ -22,4 +43,5 @@ app.use('/assignments', assignmentsRouter)
 app.use('/resources', resourcesRouter)
 app.use('/students', studentsRouter)
 
-app.listen(3000, () => console.log('Server Started'))
+
+app.listen(5000, () => console.log('Server Started'))
