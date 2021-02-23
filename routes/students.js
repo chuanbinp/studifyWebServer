@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Student = require('../models/student.js')
+const CampaignResult = require('../models/campaignResult.js')
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -22,9 +23,12 @@ router.post('/', async (req, res) => {
       username: req.body.username,
       password: req.body.password,
     })
+
     try {
-      const newStudent = await stud.save()
-      res.status(201).json(newStudent)
+      const newStudent = await stud.save().then(async(stud) => {
+          await initStudentCampaignResult(stud, res)
+          res.status(201).json(stud)
+        })
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
@@ -49,12 +53,51 @@ router.patch('/:id', getStudent, async (req, res) => {
 // Deleting One
 router.delete('/:id', getStudent, async (req, res) => {
     try {
-      await res.student.remove()
-      res.json({ message: 'Deleted Student' })
+      await res.student.remove().then(async() => {
+        await removeStudentCampaignResult(res.student._id, res)
+        res.json({ message: 'Deleted Student' })
+      })
+      
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
   })
+
+// Initialise new student's campaign results as -1 in CampaignResult collection
+async function initStudentCampaignResult(student, res) {
+    const cResult = new CampaignResult({
+    userId: student._id,
+    easyRE: "-1",
+    easySD: "-1",
+    easySV: "-1",
+    easySM: "-1",
+    medRE: "-1",
+    medSD: "-1",
+    medSV: "-1",
+    medSM: "-1",
+    advRE: "-1",
+    advSD: "-1",
+    advSV: "-1",
+    advSM: "-1",
+  })
+  try {
+    const newCampaignResult = await cResult.save()
+  } catch (err) {
+    res.status(400).json({ message: err.message })
+  }
+}
+
+// Delete student's campaign results using id
+async function removeStudentCampaignResult(id, res) {
+  console.log(id)
+  let campaignResult
+    try {
+        campaignResult = await CampaignResult.findOne({ userId: id })
+        await campaignResult.remove()
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+}
 
 async function getStudent(req, res, next) {
     let student
