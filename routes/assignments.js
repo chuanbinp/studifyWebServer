@@ -49,6 +49,42 @@ router.delete('/:id', getAssignment, async (req, res) => {
     }
   })
 
+// Creating assignment with random questions 
+router.post('/player_create',  async (req, res ) => {
+    try {
+      questionIds = [];
+      console.log(req.body);
+      for (var question of req.body.data){
+        console.log(question);
+        selectedCategory = question.category;
+        selectedDifficulty = question.difficulty; 
+        const queriedQuestions = await Question.find({
+          category: selectedCategory,
+          difficulty: selectedDifficulty
+        });
+        var random = Math.floor(Math.random() * queriedQuestions.length)
+        var selectedQuestion = queriedQuestions[random];
+        console.log(selectedQuestion)
+        questionIds.push(selectedQuestion._id);
+      }
+      try {
+        const asg = new Assignment({
+          name: "student created",
+          questionIds: questionIds,
+        })
+        const newAssignment = await asg.save()
+        res.status(201).json(newAssignment)
+      } catch (err) {
+        res.status(400).json({ message: err.message })
+      }
+      
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message })
+    } 
+
+}) 
+
 async function getAssignment(req, res, next) {
     let assignment
     try {

@@ -68,6 +68,7 @@ router.delete('/:id', getStudent, async (req, res) => {
 // Student Log In
 router.get('/login', async (req, res) => {
   try {
+    console.log(req.query.username + req.query.password)
     const authUser = await Student.findOne({username : req.query.username});
     
     if (!authUser){
@@ -77,7 +78,7 @@ router.get('/login', async (req, res) => {
       if(authUser.password==req.query.password)
         res.status(201).json(authUser);
       else
-       res.status(401).json({message: "Wrong username or password"});
+       res.status(401).json({message: "Incorrect password"});
     }
     
   } catch (err) {
