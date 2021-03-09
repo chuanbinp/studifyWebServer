@@ -1,9 +1,33 @@
 const express = require('express')
 const router = express.Router()
 const Assignment = require('../models/assignment.js')
+const question = require('../models/question.js')
 var Question = require('../models/question.js')
 
 // Getting all
+router.get('/', getAllAssignments, async (req, res) => {
+  try {
+    res.json(res.assignments)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
+// Getting a specific question from assignment, pass in level=1 in query string to obtain first question
+router.get('/question/:id', async (req, res) => {
+  try {
+    let assignment = await Assignment.findById(req.params.id)
+    if (assignment == null) {
+      return res.status(404).json({ message: 'Cannot find assignment' })
+    }
+    res.status(200).send(
+      assignment.questionIds[req.query.level-1]
+    );
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+})
+
 router.get('/', getAllAssignments, async (req, res) => {
   try {
     res.json(res.assignments)
