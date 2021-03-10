@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Student = require('../models/student.js')
 var CampaignResult = require('../models/campaignResult.js')
+const e = require('express')
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -51,6 +52,7 @@ router.patch('/:id', getStudent, async (req, res) => {
   })
 
 // Deleting One
+// isn't the id passed as req.params.id? -weijie
 router.delete('/:id', getStudent, async (req, res) => {
     try {
       await res.student.remove().then(async() => {
@@ -62,6 +64,27 @@ router.delete('/:id', getStudent, async (req, res) => {
       res.status(500).json({ message: err.message })
     }
   })
+
+// Student Log In
+router.get('/login', async (req, res) => {
+  try {
+    console.log(req.query.username + req.query.password)
+    const authUser = await Student.findOne({username : req.query.username});
+    
+    if (!authUser){
+      res.status(401).json({message: "Wrong username or password"})
+    }
+    else{
+      if(authUser.password==req.query.password)
+        res.status(201).json(authUser);
+      else
+       res.status(401).json({message: "Incorrect password"});
+    }
+    
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
 
 // Initialise new student's campaign results as -1 in CampaignResult collection
 async function initStudentCampaignResult(student, res) {

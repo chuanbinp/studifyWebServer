@@ -1,9 +1,33 @@
 const express = require('express')
 const router = express.Router()
 const Assignment = require('../models/assignment.js')
+const question = require('../models/question.js')
 var Question = require('../models/question.js')
 
 // Getting all
+router.get('/', getAllAssignments, async (req, res) => {
+  try {
+    res.json(res.assignments)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
+// Getting a specific question from assignment, pass in level=1 in query string to obtain first question
+router.get('/question/:id', async (req, res) => {
+  try {
+    let assignment = await Assignment.findById(req.params.id)
+    if (assignment == null) {
+      return res.status(404).json({ message: 'Cannot find assignment' })
+    }
+    res.status(200).send(
+      assignment.questionIds[req.query.level-1]
+    );
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+})
+
 router.get('/', getAllAssignments, async (req, res) => {
   try {
     res.json(res.assignments)
@@ -48,6 +72,42 @@ router.delete('/:id', getAssignment, async (req, res) => {
       res.status(500).json({ message: err.message })
     }
   })
+
+// Creating assignment with random questions 
+router.post('/player_create',  async (req, res ) => {
+    try {
+      questionIds = [];
+      console.log(req.body);
+      for (var question of req.body.data){
+        console.log(question);
+        selectedCategory = question.category;
+        selectedDifficulty = question.difficulty; 
+        const queriedQuestions = await Question.find({
+          category: selectedCategory,
+          difficulty: selectedDifficulty
+        });
+        var random = Math.floor(Math.random() * queriedQuestions.length)
+        var selectedQuestion = queriedQuestions[random];
+        console.log(selectedQuestion)
+        questionIds.push(selectedQuestion._id);
+      }
+      try {
+        const asg = new Assignment({
+          name: "student created",
+          questionIds: questionIds,
+        })
+        const newAssignment = await asg.save()
+        res.status(201).json(newAssignment)
+      } catch (err) {
+        res.status(400).json({ message: err.message })
+      }
+      
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message })
+    } 
+
+}) 
 
 async function getAssignment(req, res, next) {
     let assignment

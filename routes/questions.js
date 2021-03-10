@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 // Getting one
 router.get('/:id', getQuestion, async (req, res) => {
     try {
-        res.json(res.question)
+        res.status(200).json(res.question)
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
