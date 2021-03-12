@@ -68,7 +68,6 @@ router.delete('/:id', getStudent, async (req, res) => {
 // Student Log In
 router.get('/login', async (req, res) => {
   try {
-    console.log(req.query.username + req.query.password)
     const authUser = await Student.findOne({username : req.query.username});
     
     if (!authUser){

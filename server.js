@@ -46,6 +46,7 @@ const resourcesRouter = require('./routes/resources')
 const studentsRouter = require('./routes/students')
 const campaignResultsRouter = require('./routes/campaignResults')
 const assignmentResultsRouter = require('./routes/assignmentResults')
+const teachersRouter = require('./routes/teachers')
 
 app.use('/questions', questionsRouter)
 app.use('/assignments', assignmentsRouter)
@@ -53,6 +54,7 @@ app.use('/resources', resourcesRouter)
 app.use('/students', studentsRouter)
 app.use('/campaignResults', campaignResultsRouter)
 app.use('/assignmentResults', assignmentResultsRouter)
+app.use('/teachers', teachersRouter)
 
 
 app.listen(5000, () => console.log('Server Started'))
