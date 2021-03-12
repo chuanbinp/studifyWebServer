@@ -90,18 +90,11 @@ router.get('/login', async (req, res) => {
 async function initStudentCampaignResult(student, res) {
     const cResult = new CampaignResult({
     userId: student._id,
-    easyRE: "-1",
-    easySD: "-1",
-    easySV: "-1",
-    easySM: "-1",
-    medRE: "-1",
-    medSD: "-1",
-    medSV: "-1",
-    medSM: "-1",
-    advRE: "-1",
-    advSD: "-1",
-    advSV: "-1",
-    advSM: "-1",
+    intro: ['0','0','0','0','0'],
+    re: ['0','0','0','0','0'],
+    sd: ['0','0','0','0','0'],
+    sv: ['0','0','0','0','0'],
+    sm: ['0','0','0','0','0']
   })
   try {
     const newCampaignResult = await cResult.save()
