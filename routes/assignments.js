@@ -13,6 +13,15 @@ router.get('/', getAllAssignments, async (req, res) => {
   }
 })
 
+// Getting all assignments where assignmentType = 'assignment'
+router.get('/assignmentsonly', getAllAssignmentsOnly, async (req, res) => {
+  try {
+    res.json(res.assignments)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
 // Getting a specific question from assignment, pass in level=1 in query string to obtain first question
 router.get('/question/:id', async (req, res) => {
   try {
@@ -28,19 +37,20 @@ router.get('/question/:id', async (req, res) => {
   }
 })
 
-router.get('/', getAllAssignments, async (req, res) => {
-  try {
-    res.json(res.assignments)
-  } catch (err) {
-    res.status(500).json({ message: err.message })
-  }
-})
+// router.get('/', getAllAssignments, async (req, res) => {
+//   try {
+//     res.json(res.assignments)
+//   } catch (err) {
+//     res.status(500).json({ message: err.message })
+//   }
+// })
 
 // Creating one
 router.post('/', async (req, res) => {
     const asg = new Assignment({
       name: req.body.name,
       questionIds: req.body.questionIds,
+      assignmentType: req.body.assignmentType
     })
     try {
       const newAssignment = await asg.save()
@@ -54,6 +64,7 @@ router.post('/', async (req, res) => {
 router.patch('/:id', getAssignment, async (req, res) => {
     res.assignment.name = req.body.name
     res.assignment.questionIds = req.body.questionIds
+    res.assignment.assignmentType = req.body.assignmentType
 
     try {
       const updatedAssignment = await res.assignment.save()
@@ -95,6 +106,7 @@ router.post('/player_create',  async (req, res ) => {
         const asg = new Assignment({
           name: "student created",
           questionIds: questionIds,
+          assignmentType: "challenge"
         })
         const newAssignment = await asg.save()
         res.status(201).json(newAssignment)
@@ -109,6 +121,7 @@ router.post('/player_create',  async (req, res ) => {
 
 }) 
 
+// Midddleware to get assignment based on _id
 async function getAssignment(req, res, next) {
     let assignment
     try {
@@ -124,6 +137,7 @@ async function getAssignment(req, res, next) {
     next()
 }
 
+// Middleware for all assignments 
 async function getAllAssignments(req, res, next) {
     let assignments
 
@@ -152,6 +166,37 @@ async function getAllAssignments(req, res, next) {
         return res.status(500).json({ message: err.message })
     }
     next()
+}
+
+// Middleware for all assignments where assignmentType='assignment'
+async function getAllAssignmentsOnly(req, res, next) {
+  let assignments
+
+  try {
+      assignments = await Assignment.find({assignmentType:'assignment'}).lean()
+      if (assignments == null) {
+          return res.status(404).json({ message: 'Cannot find assignments' })
+      }
+      
+      await Promise.all(assignments.map(async (asg) => {
+              asg["questions"] = []
+      }))
+
+      await Promise.all(assignments.map(async (asg) => {
+          
+          await Promise.all(asg.questionIds.map(async (qId) => {
+              var qns = await Question.findById(qId)
+              asg.questions.push(qns)
+          }))
+
+      }))
+
+      res.assignments = assignments
+
+  } catch (err) {
+      return res.status(500).json({ message: err.message })
+  }
+  next()
 }
 
 module.exports = router
