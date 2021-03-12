@@ -19,7 +19,6 @@ router.post('/', async (req, res) => {
         userId: req.body.userId,
         assignmentId: req.body.assignmentId,
         score: req.body.score,
-        totalScore: req.body.totalScore,
         wrongQuestionIds: req.body.wrongQuestionIds
     })
     try {
@@ -35,7 +34,6 @@ router.patch('/:id', getAssignmentResult, async (req, res) => {
     res.assignmentResult.userId = req.body.userId
     res.assignmentResult.assignmentId = req.body.assignmentId
     res.assignmentResult.score = req.body.score
-    res.assignmentResult.totalScore = req.body.totalScore
     res.assignmentResult.wrongQuestionIds = req.body.wrongQuestionIds
 
     try {

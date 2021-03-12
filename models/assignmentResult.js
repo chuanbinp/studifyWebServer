@@ -13,10 +13,6 @@ const assignmentResultSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  totalScore: {
-    type: String,
-    required: true
-  },
   wrongQuestionIds: {
     type: [String],
     required: true
