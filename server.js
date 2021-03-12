@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const express = require('express')
 const app = express()
+const bodyparser = require('body-parser') 
 const mongoose = require('mongoose')
 Admin = mongoose.mongo.Admin
 
@@ -10,7 +11,13 @@ const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to Database'))
 
+console.log(process.env.DATABASE_URL)
+
 app.use(express.json())
+
+// Body-parser middleware 
+app.use(bodyparser.urlencoded({extended:false})) 
+app.use(bodyparser.json()) 
 
 // CORS
 const cors = require('cors')
@@ -39,6 +46,7 @@ const resourcesRouter = require('./routes/resources')
 const studentsRouter = require('./routes/students')
 const campaignResultsRouter = require('./routes/campaignResults')
 const assignmentResultsRouter = require('./routes/assignmentResults')
+const teachersRouter = require('./routes/teachers')
 
 app.use('/questions', questionsRouter)
 app.use('/assignments', assignmentsRouter)
@@ -46,6 +54,7 @@ app.use('/resources', resourcesRouter)
 app.use('/students', studentsRouter)
 app.use('/campaignResults', campaignResultsRouter)
 app.use('/assignmentResults', assignmentResultsRouter)
+app.use('/teachers', teachersRouter)
 
 
 app.listen(5000, () => console.log('Server Started'))

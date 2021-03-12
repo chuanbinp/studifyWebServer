@@ -5,6 +5,10 @@ const assignmentSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  assignmentType: {
+    type: String,
+    required: true
+  },
   questionIds: {
     type: [String],
     required: true

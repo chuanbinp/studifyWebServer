@@ -17,11 +17,32 @@ router.get('/', async (req, res) => {
 // Getting one
 router.get('/:id', getQuestion, async (req, res) => {
     try {
-        res.json(res.question)
+        res.status(200).json(res.question)
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
   })
+
+// Getting one based on selected category & difficulty, filter out existingQns
+router.post('/gamequery', async (req, res) => {
+  try {
+
+    var queriedQuestion = await Question.findOne({
+      category: req.body.category,
+      difficulty: req.body.difficulty,
+      _id: {$nin: req.body.pastQnsIds}
+    })
+    
+    if (queriedQuestion == null) {
+      return res.status(404).json({ message: 'Cannot find any of such question' })
+    }
+    res.json(queriedQuestion)
+    console.log("Get Question based on Category, Difficulty, excluding past QnsIds")
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+
+})
 
 // Creating one
 router.post('/', async (req, res) => {

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Student = require('../models/student.js')
 var CampaignResult = require('../models/campaignResult.js')
+const e = require('express')
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -51,6 +52,7 @@ router.patch('/:id', getStudent, async (req, res) => {
 })
 
 // Deleting One
+// isn't the id passed as req.params.id? -weijie
 router.delete('/:id', getStudent, async (req, res) => {
   try {
     await res.student.remove().then(async () => {
@@ -63,22 +65,35 @@ router.delete('/:id', getStudent, async (req, res) => {
   }
 })
 
+// Student Log In
+router.get('/login', async (req, res) => {
+  try {
+    const authUser = await Student.findOne({username : req.query.username});
+    
+    if (!authUser){
+      res.status(401).json({message: "Wrong username or password"})
+    }
+    else{
+      if(authUser.password==req.query.password)
+        res.status(201).json(authUser);
+      else
+       res.status(401).json({message: "Incorrect password"});
+    }
+    
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
 // Initialise new student's campaign results as -1 in CampaignResult collection
 async function initStudentCampaignResult(student, res) {
   const cResult = new CampaignResult({
     userId: student._id,
-    easyRE: "-1",
-    easySD: "-1",
-    easySV: "-1",
-    easySM: "-1",
-    medRE: "-1",
-    medSD: "-1",
-    medSV: "-1",
-    medSM: "-1",
-    advRE: "-1",
-    advSD: "-1",
-    advSV: "-1",
-    advSM: "-1",
+    intro: ['0','0','0','0','0'],
+    re: ['0','0','0','0','0'],
+    sd: ['0','0','0','0','0'],
+    sv: ['0','0','0','0','0'],
+    sm: ['0','0','0','0','0']
   })
   try {
     const newCampaignResult = await cResult.save()
