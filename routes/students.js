@@ -36,16 +36,6 @@ router.post('/', async (req, res) => {
   }
 })
 
-try {
-  const newStudent = await stud.save().then(async (stud) => {
-    await initStudentCampaignResult(stud, res)
-    res.status(201).json(stud)
-  })
-} catch (err) {
-  res.status(400).json({ message: err.message })
-}
-})
-
 // Updating One
 router.patch('/:id', getStudent, async (req, res) => {
   res.student.name = req.body.name
