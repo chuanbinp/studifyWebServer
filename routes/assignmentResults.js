@@ -15,6 +15,10 @@ router.get('/', async (req, res) => {
 
 // Creating one
 router.post('/', async (req, res) => {
+    console.log(req.body.userId);
+    console.log(req.body.assignmentId);
+    console.log(req.body.score);
+    console.log(req.body.wrongQuestionIds);
     const asgResult = new AssignmentResult({
         userId: req.body.userId,
         assignmentId: req.body.assignmentId,
@@ -22,6 +26,7 @@ router.post('/', async (req, res) => {
         wrongQuestionIds: req.body.wrongQuestionIds
     })
     try {
+      console.log("Creating Assignment results :", asgResult);
       const newAssignmentResult = await asgResult.save()
       res.status(201).json(newAssignmentResult)
     } catch (err) {
