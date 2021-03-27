@@ -8,7 +8,7 @@ NodeJS, Express, MongoDB Cloud
 ```npm run devStart```
 
 ### Data Injection:
-Under /data_injection/db_injection.py
+_Under /data_injection/db_injection.py_  
 Script reads in excel file (db_question.xlsx) that contains all the questions and sends POST requests to the already-running server sequentially. Error-handling implemented.  
 
 ```npm run devStart```  
