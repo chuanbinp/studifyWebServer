@@ -9,14 +9,14 @@ const resourceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  difficulty: {
-    type: String,
-    required: true
-  },
+  // difficulty: {
+  //   type: String,
+  //   required: true
+  // },
   url: {
     type: String,
     required: true
   }
-}, { collection: 'Resource'})
+}, { collection: 'Resource' })
 
 module.exports = mongoose.model('Resource', resourceSchema)
