@@ -20,7 +20,7 @@ router.get('/campaignvideo', async (req, res) => {
         category: req.query.category,
       })
       res.json(resources)
-      console.log("Get All Resources")
+      console.log("Get a specific category Resource")
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
