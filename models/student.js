@@ -20,6 +20,10 @@ const studentSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  avatar: {
+    type: String,
+    required: true
   }
 }, { collection: 'Student'})
 
