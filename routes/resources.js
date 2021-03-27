@@ -13,6 +13,19 @@ router.get('/', async (req, res) => {
   }
 })
 
+// Getting by category
+router.get('/campaignvideo', async (req, res) => {
+  try {
+      const resources = await Resource.findOne({
+        category: req.query.category,
+      })
+      res.json(resources)
+      console.log("Get a specific category Resource")
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
 // Creating one
 router.post('/', async (req, res) => {
   const resrc = new Resource({

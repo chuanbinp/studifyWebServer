@@ -23,6 +23,7 @@ router.post('/', async (req, res) => {
     tutorialGrp: req.body.tutorialGrp,
     username: req.body.username,
     password: req.body.password,
+    avatar: req.body.avatar
   })
 
   try {
@@ -35,6 +36,16 @@ router.post('/', async (req, res) => {
   }
 })
 
+try {
+  const newStudent = await stud.save().then(async (stud) => {
+    await initStudentCampaignResult(stud, res)
+    res.status(201).json(stud)
+  })
+} catch (err) {
+  res.status(400).json({ message: err.message })
+}
+})
+
 // Updating One
 router.patch('/:id', getStudent, async (req, res) => {
   res.student.name = req.body.name
@@ -42,6 +53,19 @@ router.patch('/:id', getStudent, async (req, res) => {
   res.student.tutorialGrp = req.body.tutorialGrp
   res.student.username = req.body.username
   res.student.password = req.body.password
+  res.student.avatar = req.body.avatar
+
+  try {
+    const updatedStudent = await res.student.save()
+    res.status(201).json(updatedStudent)
+  } catch (err) {
+    res.status(400).json({ message: err.message })
+  }
+})
+
+// Updating One, only avatar
+router.patch('/avatar/:id', getStudent, async (req, res) => {
+  res.student.avatar = req.body.avatar
 
   try {
     const updatedStudent = await res.student.save()
@@ -68,18 +92,18 @@ router.delete('/:id', getStudent, async (req, res) => {
 // Student Log In
 router.get('/login', async (req, res) => {
   try {
-    const authUser = await Student.findOne({username : req.query.username});
-    
-    if (!authUser){
-      res.status(401).json({message: "Wrong username or password"})
+    const authUser = await Student.findOne({ username: req.query.username });
+
+    if (!authUser) {
+      res.status(401).json({ message: "Wrong username or password" })
     }
-    else{
-      if(authUser.password==req.query.password)
+    else {
+      if (authUser.password == req.query.password)
         res.status(201).json(authUser);
       else
-       res.status(401).json({message: "Incorrect password"});
+        res.status(401).json({ message: "Incorrect password" });
     }
-    
+
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
@@ -89,11 +113,11 @@ router.get('/login', async (req, res) => {
 async function initStudentCampaignResult(student, res) {
   const cResult = new CampaignResult({
     userId: student._id,
-    intro: ['0','0','0','0','0'],
-    re: ['0','0','0','0','0'],
-    sd: ['0','0','0','0','0'],
-    sv: ['0','0','0','0','0'],
-    sm: ['0','0','0','0','0']
+    intro: ['0', '0', '0', '0', '0'],
+    re: ['0', '0', '0', '0', '0'],
+    sd: ['0', '0', '0', '0', '0'],
+    sv: ['0', '0', '0', '0', '0'],
+    sm: ['0', '0', '0', '0', '0']
   })
   try {
     const newCampaignResult = await cResult.save()
