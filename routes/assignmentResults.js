@@ -16,11 +16,15 @@ router.get('/', async (req, res) => {
 // Creating one
 router.post('/', async (req, res) => {
     console.log(req.body.userId);
+    console.log(req.body.userName);
+    console.log(req.body.avatar);
     console.log(req.body.assignmentId);
     console.log(req.body.score);
     console.log(req.body.wrongQuestionIds);
     const asgResult = new AssignmentResult({
         userId: req.body.userId,
+        userName: req.body.userName,
+        avatar: req.body.avatar,
         assignmentId: req.body.assignmentId,
         score: req.body.score,
         wrongQuestionIds: req.body.wrongQuestionIds
@@ -37,6 +41,8 @@ router.post('/', async (req, res) => {
 // Updating One
 router.patch('/:id', getAssignmentResult, async (req, res) => {
     res.assignmentResult.userId = req.body.userId
+    res.assignmentResult.userName = req.body.userName
+    res.assignmentResult.avatar = req.body.avatar
     res.assignmentResult.assignmentId = req.body.assignmentId
     res.assignmentResult.score = req.body.score
     res.assignmentResult.wrongQuestionIds = req.body.wrongQuestionIds

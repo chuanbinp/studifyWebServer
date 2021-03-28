@@ -5,6 +5,14 @@ const assignmentResultSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  userName: {
+    type: String,
+    required: true
+  },
+  avatar :{
+    type: String,
+    required: true
+  },
   assignmentId: {
     type: String,
     required: true
