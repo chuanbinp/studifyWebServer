@@ -26,6 +26,7 @@ npm run devStart
 cd load_testing    
 locust -f locustfile.py --host=http://localhost:5000  
 ```
-
+Open browser http://localhost:8089/ and enter the _Number of Users_ and _Spawn Rate_  
+  
 ### API document in Google Drive: 
 CZ3003 SSAD/Lab3/Database & API https://docs.google.com/document/d/16xt9JD0s0VVzXxSrnYKUwFLONUz38ZfNjRc8A_bU8So/edit?usp=sharing
