@@ -6,6 +6,7 @@ NodeJS, Express, MongoDB Cloud
 ```npm install```
 
 ```npm run devStart```
+*runs at port 5000
 
 ### Data Injection:
 _Under /data_injection/db_injection.py_  
